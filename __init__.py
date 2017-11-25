@@ -18,23 +18,26 @@
 
 import aiml
 from os import listdir
-from os.path import dirname, isfile
-from mycroft.skills.core import FallbackSkill
 from mycroft.util.log import getLogger
+from os.path import dirname
+import sys
+sys.path.append(dirname(__file__))
+from auto_translatable import AutotranslatableFallback
 
 __author__ = 'jarbas'
 
 LOGGER = getLogger(__name__)
 
 
-class AimlFallback(FallbackSkill):
+class AimlFallback(AutotranslatableFallback):
     def __init__(self):
         super(AimlFallback, self).__init__(name='AimlSkill')
         self.kernel = aiml.Kernel()
+        self.input_lang = "en-us"
         # TODO read from config maybe?
         self.aiml_path = dirname(__file__) + "/aiml"
         self.brain_path = dirname(__file__) + "/bot_brain.brn"
-        #self.load_brain()
+        self.load_brain()
 
     def load_brain(self):
         aimls = listdir(self.aiml_path)
@@ -42,8 +45,7 @@ class AimlFallback(FallbackSkill):
             self.kernel.bootstrap(learnFiles=self.aiml_path + "/" + aiml)
 
     def initialize(self):
-        #self.register_fallback(self.handle_fallback, 99)
-        pass
+        self.register_fallback(self.handle_fallback, 99)
 
     def ask_brain(self, utterance):
         response = self.kernel.respond(utterance)
@@ -61,6 +63,7 @@ class AimlFallback(FallbackSkill):
         self.kernel.resetBrain() # Manual remove
         self.remove_fallback(self.handle_fallback)
         super(AimlFallback, self).shutdown()
+
 
 def create_skill():
     return AimlFallback()
