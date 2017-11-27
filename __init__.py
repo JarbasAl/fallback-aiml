@@ -19,10 +19,13 @@
 import aiml
 from os import listdir
 from mycroft.util.log import getLogger
-from os.path import dirname
-import sys
-sys.path.append(dirname(__file__))
-from auto_translatable import AutotranslatableFallback
+try:
+    from mycroft.skills.auto_translatable import AutotranslatableFallback
+except ImportError:
+    from os.path import dirname
+    import sys
+    sys.path.append(dirname(__file__))
+    from auto_translatable import AutotranslatableFallback
 
 __author__ = 'jarbas'
 
