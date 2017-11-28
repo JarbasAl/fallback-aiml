@@ -19,7 +19,7 @@
 import aiml
 from os import listdir
 from mycroft.util.log import getLogger
-from os.path import dirname
+from os.path import dirname, isfile
 try:
     from mycroft.skills.auto_translatable import AutotranslatableFallback
 except ImportError:
@@ -43,9 +43,12 @@ class AimlFallback(AutotranslatableFallback):
         self.load_brain()
 
     def load_brain(self):
-        aimls = listdir(self.aiml_path)
-        for aiml in aimls:
-            self.kernel.bootstrap(learnFiles=self.aiml_path + "/" + aiml)
+        if isfile(self.brain_path):
+            self.kernel.bootstrap(brainFile=self.brain_path)
+        else:
+            aimls = listdir(self.aiml_path)
+            for aiml in aimls:
+                self.kernel.bootstrap(learnFiles=self.aiml_path + "/" + aiml)
 
     def initialize(self):
         self.register_fallback(self.handle_fallback, 99)
