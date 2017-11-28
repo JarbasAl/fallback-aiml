@@ -49,6 +49,7 @@ class AimlFallback(AutotranslatableFallback):
             aimls = listdir(self.aiml_path)
             for aiml in aimls:
                 self.kernel.bootstrap(learnFiles=self.aiml_path + "/" + aiml)
+            self.kernel.saveBrain(self.brain_path)
 
     def initialize(self):
         self.register_fallback(self.handle_fallback, 99)
