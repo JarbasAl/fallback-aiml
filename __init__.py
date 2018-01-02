@@ -18,7 +18,6 @@
 
 import aiml
 from os import listdir
-from mycroft.util.log import getLogger
 from os.path import dirname, isfile
 try:
     from mycroft.skills.auto_translatable import AutotranslatableFallback
@@ -28,8 +27,6 @@ except ImportError:
     from auto_translatable import AutotranslatableFallback
 
 __author__ = 'jarbas'
-
-LOGGER = getLogger(__name__)
 
 
 class AimlFallback(AutotranslatableFallback):
@@ -47,7 +44,11 @@ class AimlFallback(AutotranslatableFallback):
         else:
             aimls = listdir(self.aiml_path)
             for aiml in aimls:
-                self.kernel.bootstrap(learnFiles=self.aiml_path + "/" + aiml)
+                try:
+                    self.kernel.bootstrap(learnFiles=self.aiml_path + "/" +
+                                                   aiml)
+                except Exception as e:
+                    self.log.error(e)
             self.kernel.saveBrain(self.brain_path)
 
     def initialize(self):
