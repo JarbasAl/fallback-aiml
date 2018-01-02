@@ -49,7 +49,10 @@ class AimlFallback(AutotranslatableFallback):
                                                    aiml)
                 except Exception as e:
                     self.log.error(e)
-            self.kernel.saveBrain(self.brain_path)
+            try:
+                self.kernel.saveBrain(self.brain_path)
+            except Exception as e:
+                self.log.error(e)
 
     def initialize(self):
         self.load_brain()
