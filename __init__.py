@@ -50,7 +50,8 @@ class AimlFallback(AutotranslatableFallback):
                 except Exception as e:
                     self.log.error(e)
             try:
-                self.kernel.saveBrain(self.brain_path)
+                pass
+                #self.kernel.saveBrain(self.brain_path)
             except Exception as e:
                 self.log.error(e)
 
