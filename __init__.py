@@ -40,7 +40,6 @@ class AimlFallback(AutotranslatableFallback):
         # TODO read from config maybe?
         self.aiml_path = dirname(__file__) + "/aiml"
         self.brain_path = dirname(__file__) + "/bot_brain.brn"
-        self.load_brain()
 
     def load_brain(self):
         if isfile(self.brain_path):
@@ -52,6 +51,7 @@ class AimlFallback(AutotranslatableFallback):
             self.kernel.saveBrain(self.brain_path)
 
     def initialize(self):
+        self.load_brain()
         self.register_fallback(self.handle_fallback, 99)
 
     def ask_brain(self, utterance):
