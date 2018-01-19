@@ -55,8 +55,9 @@ class AimlFallback(AutotranslatableFallback):
                 self.log.error(e)
 
     def initialize(self):
-        self.load_brain()
-        self.register_fallback(self.handle_fallback, 99)
+        #self.load_brain()
+        #self.register_fallback(self.handle_fallback, 99)
+        pass
 
     def ask_brain(self, utterance):
         response = self.kernel.respond(utterance)
