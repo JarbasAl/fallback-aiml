@@ -61,7 +61,7 @@ class AutotranslatableSkill(MycroftSkill):
                 "mute": mute,
                 "more_speech": more_speech,
                 "metadata": metadata}
-        self.emitter.emit(Message("speak", data)))
+        self.emitter.emit(Message("speak", data))
 
 
 class AutotranslatableFallback(FallbackSkill):
@@ -121,7 +121,7 @@ class AutotranslatableFallback(FallbackSkill):
                 "mute": mute,
                 "more_speech": more_speech,
                 "metadata": metadata}
-        self.emitter.emit(Message("speak", data)))
+        self.emitter.emit(Message("speak", data))
 
     def register_fallback(self, handler, priority):
         """
