@@ -42,7 +42,6 @@ class AutotranslatableSkill(MycroftSkill):
                """
         # translate utterance for skills that generate speech at
         # runtime, or by request
-        message_context = message_context or self.message_context
         utterance_lang = self.language_detect(utterance)
         if "-" in utterance_lang:
             utterance_lang = utterance_lang.split("-")[0]
@@ -62,8 +61,7 @@ class AutotranslatableSkill(MycroftSkill):
                 "mute": mute,
                 "more_speech": more_speech,
                 "metadata": metadata}
-        self.emitter.emit(Message("speak", data, self.get_message_context(
-            message_context)))
+        self.emitter.emit(Message("speak", data)))
 
 
 class AutotranslatableFallback(FallbackSkill):
@@ -74,6 +72,8 @@ class AutotranslatableFallback(FallbackSkill):
         self.input_lang = None
 
     def language_detect(self, utterance):
+        utterance = unicodedata.normalize('NFKD', utterance).encode('ascii',
+                                                                    'ignore')
         return language_detect(utterance)
 
     def translate(self, text, lang=None):
@@ -102,8 +102,7 @@ class AutotranslatableFallback(FallbackSkill):
                """
         # translate utterance for skills that generate speech at
         # runtime, or by request
-        message_context = message_context or self.message_context
-        utterance_lang = language_detect(utterance)
+        utterance_lang = self.language_detect(utterance)
         if "-" in utterance_lang:
             utterance_lang = utterance_lang.split("-")[0]
         target_lang = self.lang
@@ -122,8 +121,7 @@ class AutotranslatableFallback(FallbackSkill):
                 "mute": mute,
                 "more_speech": more_speech,
                 "metadata": metadata}
-        self.emitter.emit(Message("speak", data, self.get_message_context(
-            message_context)))
+        self.emitter.emit(Message("speak", data)))
 
     def register_fallback(self, handler, priority):
         """
@@ -151,7 +149,7 @@ class AutotranslatableFallback(FallbackSkill):
                 return success
 
             self.instance_fallback_handlers.append(universal_translate_handler)
-            skill_folder = self._dir  # skill
+            skill_folder = self.root_dir  # skill
             if not skill_folder:
                 raise EnvironmentError("could not get skill dir")
             self._register_fallback(universal_translate_handler, priority, skill_folder,
@@ -159,7 +157,7 @@ class AutotranslatableFallback(FallbackSkill):
         else:
             self.instance_fallback_handlers.append(handler)
             # folder path
-            skill_folder = self._dir  # skill
+            skill_folder = self.root_dir  # skill
             if not skill_folder:
                 raise EnvironmentError("could not get skill dir")
             self._register_fallback(handler, priority, skill_folder,
