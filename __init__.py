@@ -19,12 +19,8 @@
 import aiml
 from os import listdir
 from os.path import dirname, isfile
-try:
-    from mycroft.skills.auto_translatable import AutotranslatableFallback
-except ImportError:
-    import sys
-    sys.path.append(dirname(__file__))
-    from auto_translatable import AutotranslatableFallback
+from mycroft_jarbas_utils.skills.auto_translatable import AutotranslatableFallback
+
 
 __author__ = 'jarbas'
 
@@ -35,8 +31,8 @@ class AimlFallback(AutotranslatableFallback):
         self.kernel = aiml.Kernel()
         self.input_lang = "en-us"
         # TODO read from config maybe?
-        self.aiml_path = dirname(__file__) + "/aiml"
-        self.brain_path = dirname(__file__) + "/bot_brain.brn"
+        self.aiml_path = self._dir + "/aiml"
+        self.brain_path = self._dir + "/bot_brain.brn"
 
     def load_brain(self):
         if isfile(self.brain_path):
@@ -50,8 +46,7 @@ class AimlFallback(AutotranslatableFallback):
                 except Exception as e:
                     self.log.error(e)
             try:
-                pass
-                #self.kernel.saveBrain(self.brain_path)
+                self.kernel.saveBrain(self.brain_path)
             except Exception as e:
                 self.log.error(e)
 
