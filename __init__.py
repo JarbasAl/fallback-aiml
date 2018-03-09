@@ -37,7 +37,7 @@ class AimlFallback(AutotranslatableFallback):
     def get_intro_message(self):
         name = "a i m l"
         return "you installed universal " + name + " skill, you should " \
-               "also remove or blacklist the official " + name + \
+               "also blacklist the official " + name + \
                " skill to avoid potential problems"
 
     def load_brain(self):
